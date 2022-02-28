@@ -14,6 +14,8 @@
 
 #define PORT 2024
 
+#define Messages "messages.txt"
+
 extern int errno;
 
 void sig_wait(int sig)
@@ -23,15 +25,19 @@ void sig_wait(int sig)
 
 void send_msgs(int sd)
 {
-
+  //    sleep(1);
+  FILE *fd;
+  fd = fopen(Messages, "r");
   char msg[900];
-  int i = 0;
-  // bzero(msg, 900);
+  int i = 1;
+  bzero(msg, 900);
   printf("Trimit mesaje catre server...\n");
   fflush(stdout);
-  while (i < 5)
+  while (fgets(msg, 900, fd))
   {
-    if (write(sd, "Mesaj\n", 900) <= 0)
+    //    snprintf(msg, 1000, "Mesaj nr %d\n", i);
+    //    printf("Trimit mesaj: %s\n", msg);
+    if (write(sd, msg, 900) <= 0)
     {
       perror("[client]Eroare la write() spre server.\n");
       return errno;
@@ -39,6 +45,7 @@ void send_msgs(int sd)
     // bzero(msg, 900);
     // read(0, msg, 900);
   }
+  printf("Trimit mesa: quit\n");
   if (write(sd, "quit\n", 900) <= 0)
   {
     perror("[client]Eroare la write() spre server.\n");

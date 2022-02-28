@@ -2,6 +2,7 @@
   Original code author: Lenuta Alboaie  <adria@infoiasi.ro> (c)2009
 */
 #include <sys/stat.h>
+#include <sys/ioctl.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -19,20 +20,28 @@ extern int errno;
 
 void cl_msg_rec(int client)
 {
+  int mod = 0;
+  //    ioctl(client, FIONBIO, &mod);
   char msg[900]; // mesajul primit de la client
+  int msg_cnt = 0;
+  printf("[server-client]Asteptam mesajul...\n");
   while (1)
   {
     bzero(msg, 900);
-    printf("[server-client]Asteptam mesajul...\n");
     fflush(stdout);
 
     if (read(client, msg, 900) <= 0)
     {
+      //        printf("[server-client]Eroares la read() de la client. msg_count = %s\n", msg);
       perror("[server-client]Eroare la read() de la client.\n");
       close(client);
       exit(1);
       continue;
     }
+    //    if (strcmp(msg, "") != 0 ){
+    //        printf("%s", msg);
+    //
+    //    }
     if (strcmp(msg, "quit\n") == 0)
     {
       printf("[server-Earth]Mesajul a fost receptionat...%s\n", msg);
@@ -40,9 +49,15 @@ void cl_msg_rec(int client)
       close(client);
       break;
     }
-    printf("[server-client]Mesajul a fost receptionat...%s\n", msg);
+    else
+    {
+      //        printf("[server-client]Mesajul a fost receptionat...%s\n", msg);
+      msg_cnt = msg_cnt + 1;
+      //        printf("%d\n",msg_cnt);
+    }
     bzero(msg, 900);
   }
+  printf("[server-Earth]Am receptionat %d mesaje\n", msg_cnt);
 }
 
 void sig_wait(int sig)
