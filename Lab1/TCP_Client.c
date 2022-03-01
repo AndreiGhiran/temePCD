@@ -59,7 +59,7 @@ void send_msgs(int sd)
   bytes = bytes + sizeof("quit\n");
   time(&end_t);
   time_diff = difftime(end_t, start_t);
-  printf("--------\nTransmission time: %d\nNumber of sent messages: %d\nNUmber of bytes sent: %d\n", time_diff, msg_cnt, bytes);
+  printf("--------\nTransmission time: %f\nNumber of sent messages: %d\nNUmber of bytes sent: %d\n", time_diff, msg_cnt, bytes);
 }
 
 int main(int argc, char *argv[])

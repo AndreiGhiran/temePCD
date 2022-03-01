@@ -49,7 +49,7 @@ void cl_msg_rec(int client)
     }
     bzero(msg, 900);
   }
-    printf("--------\nUsed protocol: TCP\nNumber of messages received: %d\nBytes received: %d\n",msg_cnt,bytes);
+    printf("--------\nUsed protocol: TCP\nNumber of messages received: %d\nBytes received: %d\n",msg_cnt, bytes);
 }
 
 void sig_wait(int sig)
