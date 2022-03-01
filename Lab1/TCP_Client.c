@@ -11,6 +11,7 @@
 #include <netdb.h>
 #include <string.h>
 #include <signal.h>
+#include <time.h>
 
 #define PORT 2024
 
@@ -25,32 +26,40 @@ void sig_wait(int sig)
 
 void send_msgs(int sd)
 {
-  //      sleep(3);
+  time_t start_t, end_t;
+  double time_diff;
   FILE *fd;
   fd = fopen(Messages, "r");
   char msg[900];
-  int i = 1;
   bzero(msg, 900);
-  printf("Trimit mesaje catre server...\n");
+  int msg_cnt = 0;
+  int bytes = 0;
+  printf("Transmitting messages to server...\n");
   fflush(stdout);
+  time(&start_t);
   while (fgets(msg, 900, fd))
   {
-    //    snprintf(msg, 1000, "Mesaj nr %d\n", i);
-    //    printf("Trimit mesaj: %s\n", msg);
+
     if (write(sd, msg, 900) <= 0)
     {
       perror("[client]Eroare la write() spre server.\n");
       return errno;
     }
-    // bzero(msg, 900);
-    // read(0, msg, 900);
+    msg_cnt = msg_cnt + 1;
+    bytes = bytes + sizeof(msg);
+    bzero(msg, 900);
   }
-  printf("Trimit mesa: quit\n");
+  printf("Done Transmitting messages\n");
   if (write(sd, "quit\n", 900) <= 0)
   {
     perror("[client]Eroare la write() spre server.\n");
     return errno;
   }
+  msg_cnt = msg_cnt + 1;
+  bytes = bytes + sizeof("quit\n");
+  time(&end_t);
+  time_diff = difftime(end_t, start_t);
+  printf("--------\nTransmission time: %d\nNumber of sent messages: %d\nNUmber of bytes sent: %d\n", time_diff, msg_cnt, bytes);
 }
 
 int main(int argc, char *argv[])

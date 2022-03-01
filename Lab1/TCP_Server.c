@@ -20,36 +20,36 @@ extern int errno;
 
 void cl_msg_rec(int client)
 {
-  int n;
+    int n;
   char msg[900];
   int msg_cnt = 0;
-  printf("[server-client]Asteptam mesajul...\n");
+    int bytes = 0;
+  printf("[server-client]Waiting for messages...\n");
   while (1)
   {
     bzero(msg, 900);
     fflush(stdout);
     size_t size = 0;
-    do
-    {
-      if ((n = read(client, msg + size, 900 - size)) < 0)
-      {
-        perror("[server-client]Eroare la read() de la client.\n");
-        close(client);
-        exit(1);
-      }
-      size = size + n;
-    } while ((strchr(msg, '\n') == NULL || strchr(msg, "") == NULL) && size < 900);
+    do{
+        if((n = read(client, msg+size, 900-size)) < 0){
+          perror("[server-client]Eroare la read() de la client.\n");
+          close(client);
+          exit(1);
+        }
+        size = size + n;
+    }while((strchr(msg,'\n') == NULL || strchr(msg,"") == NULL) && size < 900);
     msg_cnt = msg_cnt + 1;
+    bytes = bytes + sizeof(msg);
     if (strcmp(msg, "quit\n") == 0)
     {
-      printf("[server-Earth]Mesajul a fost receptionat...%s\n", msg);
+      printf("[server-Earth]Transmission end message received...\n", msg);
       bzero(msg, 900);
       close(client);
       break;
     }
     bzero(msg, 900);
   }
-  printf("[server-Earth]Am receptionat %d mesaje\n", msg_cnt);
+    printf("--------\nUsed protocol: TCP\nNumber of messages received: %d\nBytes received: %d\n",msg_cnt,bytes);
 }
 
 void sig_wait(int sig)
@@ -114,7 +114,7 @@ int main()
     int client;
     int length = sizeof(from);
 
-    printf("[server]Asteptam client la portul %d...\n", PORT);
+    printf("[server]Lisening for clients at port %d...\n", PORT);
     fflush(stdout);
 
     /* acceptam un client (stare blocanta pina la realizarea conexiunii) */

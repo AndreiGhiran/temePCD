@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
 
     FILE *fd;
     fd = fopen("messages.txt", "w");
-    for (int i = 0; i < 1500000; i++)
+    for (int i = 1; i < 15000000; i++)
     {
         fputs("linie mesaj linie mesaj linie mesaj linie mesaj linie mesaj vlinie mesaj\n", fd);
     }
