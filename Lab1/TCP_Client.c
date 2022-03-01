@@ -25,7 +25,7 @@ void sig_wait(int sig)
 
 void send_msgs(int sd)
 {
-  //    sleep(1);
+  //      sleep(3);
   FILE *fd;
   fd = fopen(Messages, "r");
   char msg[900];

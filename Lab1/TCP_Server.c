@@ -20,40 +20,32 @@ extern int errno;
 
 void cl_msg_rec(int client)
 {
-  int mod = 0;
-  //    ioctl(client, FIONBIO, &mod);
-  char msg[900]; // mesajul primit de la client
+  int n;
+  char msg[900];
   int msg_cnt = 0;
   printf("[server-client]Asteptam mesajul...\n");
   while (1)
   {
     bzero(msg, 900);
     fflush(stdout);
-
-    if (read(client, msg, 900) <= 0)
+    size_t size = 0;
+    do
     {
-      //        printf("[server-client]Eroares la read() de la client. msg_count = %s\n", msg);
-      perror("[server-client]Eroare la read() de la client.\n");
-      close(client);
-      exit(1);
-      continue;
-    }
-    //    if (strcmp(msg, "") != 0 ){
-    //        printf("%s", msg);
-    //
-    //    }
+      if ((n = read(client, msg + size, 900 - size)) < 0)
+      {
+        perror("[server-client]Eroare la read() de la client.\n");
+        close(client);
+        exit(1);
+      }
+      size = size + n;
+    } while ((strchr(msg, '\n') == NULL || strchr(msg, "") == NULL) && size < 900);
+    msg_cnt = msg_cnt + 1;
     if (strcmp(msg, "quit\n") == 0)
     {
       printf("[server-Earth]Mesajul a fost receptionat...%s\n", msg);
       bzero(msg, 900);
       close(client);
       break;
-    }
-    else
-    {
-      //        printf("[server-client]Mesajul a fost receptionat...%s\n", msg);
-      msg_cnt = msg_cnt + 1;
-      //        printf("%d\n",msg_cnt);
     }
     bzero(msg, 900);
   }
