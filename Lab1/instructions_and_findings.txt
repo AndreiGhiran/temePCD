@@ -11,3 +11,9 @@ First run:
         TCP_Server
         TCP_Client <server_addres> (replace <server_addres> with 127.0.0.1 for local testing or with your server's ip addres if you are running it remote)
 
+Interesting findings during "development":
+-Sometimes the server would read empty bytes from the buffer and count them as received messages, i had to treat this case so that 
+    it stops reading from the buffer when it gets an ampty string.
+-I tested the TCP server and client over my home LAN and I noted that when it transmits data locally it is mutch faster then when it transmits it over
+    LAN. Using the local adress 15000001 messages consisting of 615098118 bytes were transmitted in 28 seconds with no losses, while when transmitting 
+    over LAN the same amount of data was transmitted in 316 seconds (a little ove 5 minutes).
