@@ -1,0 +1,13 @@
+Scripts syntax:
+
+    TCP_Client syntax: TCP_Client <server_addres> (connects to serve at <server_addres>, reads lines from messages.txt and sends them to the server)
+    TCP_Server syntax: TCP_Server (receives messages from clients and counts the number and size of said messages)
+    populate syntax: populate <number_of_messages> (generates <number_of_messages> mesages in messages.txt)
+
+First run:
+    in command line run:
+        make all
+        populate <number_of_messages> (replace <number_of_messages> with desired number of messages to be sent to the server)
+        TCP_Server
+        TCP_Client <server_addres> (replace <server_addres> with 127.0.0.1 for local testing or with your server's ip addres if you are running it remote)
+
