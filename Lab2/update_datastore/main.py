@@ -13,6 +13,7 @@ def update_datastore_beauty_facts(request):
         Response object using
         `make_response <http://flask.pocoo.org/docs/1.0/api/#flask.Flask.make_response>`.
     """
+
     content = get_updated_csv()
 
     data = make_entries(content.strip().split("\n"))
@@ -57,17 +58,15 @@ def make_entries(content):
                     vals[i] = trimmed_vals[:-1]
                 else:
                     vals[i] = vals[i][:750]
-
-            if keys[0] != "-":
-                if keys[i] == "states":
-                    entry[keys[i]] = vals[i]
-                elif "," in vals[i] or "_tags" in keys[i]:
-                    values = vals[i].split(",")
-                    entry[keys[i]] = values if values != [''] else []
-                else:
-                    entry[keys[i]] = vals[i]
+                    
+            if keys[i] == "states":
+                entry[keys[i]] = vals[i]
+            elif "," in vals[i] or "_tags" in keys[i]:
+                values = vals[i].split(",")
+                entry[keys[i]] = values if values != [''] else []
+            else:
+                entry[keys[i]] = vals[i]
         entries.append(entry)
-
     return entries
 
 
