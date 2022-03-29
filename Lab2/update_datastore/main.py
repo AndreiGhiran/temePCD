@@ -16,8 +16,8 @@ def update_datastore_beauty_facts(request):
 
     data = make_entries(content.strip().split("\n"))
 
-    # update_datastore(data[:50])
-    batch_update_datastore(data[:50])
+    # update_datastore(data)
+    batch_update_datastore(data)
     
     request_json = request.get_json()
     if request.args and 'message' in request.args:
@@ -58,6 +58,7 @@ def make_entries(content):
 
 
 def update_datastore(data):
+    inexistent_entities = []
     for item in data:
         updated = False
         with client.transaction():
