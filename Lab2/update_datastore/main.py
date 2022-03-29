@@ -1,4 +1,5 @@
 import requests
+from sys import getsizeof
 from google.cloud import datastore
 
 client = datastore.Client()
@@ -46,14 +47,27 @@ def make_entries(content):
     for vals in rows:
         entry = {}
         for i in range(0,len(vals)):
-            if keys[i] == "states":
-                entry[keys[i]] = vals[i]
-            elif "," in vals[i] or "_tags" in keys[i]:
-                values = vals[i].split(",")
-                entry[keys[i]] = values if values != [''] else []
-            else:
-                entry[keys[i]] = vals[i]
+            if getsizeof(vals[i]) >= 1500:
+                if type(vals[i]) == list:
+                    trimmed_vals = []
+                    j = 0
+                    while getsizeof(trimmed_vals) < 1500:
+                        trimmed_vals.append(vals[i][j])
+                        j += 1
+                    vals[i] = trimmed_vals[:-1]
+                else:
+                    vals[i] = vals[i][:750]
+
+            if keys[0] != "-":
+                if keys[i] == "states":
+                    entry[keys[i]] = vals[i]
+                elif "," in vals[i] or "_tags" in keys[i]:
+                    values = vals[i].split(",")
+                    entry[keys[i]] = values if values != [''] else []
+                else:
+                    entry[keys[i]] = vals[i]
         entries.append(entry)
+
     return entries
 
 
