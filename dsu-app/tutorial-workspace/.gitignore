@@ -1,0 +1,22 @@
+# Ignore everything
+*
+
+# But not these files...
+!.gitignore
+!bin
+!bin/**
+!octopus
+!octopus/*
+!LICENSE
+!package.json
+!package-lock.json
+!README.md
+!CHANGELOG
+!apihub-root/secure-channels/wallet-template
+!apihub-root/external-volume
+!apihub-root/external-volume/*
+!helloworld-dsu
+!helloworld-dsu/*
+!helloworld-constitution
+!helloworld-constitution/*
+
