@@ -1,0 +1,22 @@
+*, *:before, *:after {
+    box-sizing: border-box;
+}
+
+.homepage {
+    display: block;
+    padding: 2rem;
+    font-size: 1.5rem;
+}
+
+.homepage p {
+    padding: 1rem 0;
+}
+
+.homepage a {
+    text-decoration: none;
+    color: #3E68AD;
+}
+
+.homepage a:hover {
+    text-decoration: underline;
+}
