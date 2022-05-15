@@ -1,0 +1,3 @@
+<psk-container controller-name="AccessMarketplaceController">
+    <psk-ssapp app-name="@name" key-ssi="@keySSI"></psk-ssapp>
+</psk-container>

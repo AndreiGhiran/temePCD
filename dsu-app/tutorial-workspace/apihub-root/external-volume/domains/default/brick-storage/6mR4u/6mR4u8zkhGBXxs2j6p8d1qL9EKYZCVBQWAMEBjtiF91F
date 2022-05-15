@@ -1,0 +1,1 @@
+let n;function t(t){n=t.getConfig()}function e(){return n}export{e as g,t as s}

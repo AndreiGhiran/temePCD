@@ -1,0 +1,22 @@
+<psk-container controller-name="dossier-controllers/TestContractController">
+    <psk-modal opened>
+        <psk-label slot="title" class="title" label="@title"></psk-label>
+
+        <psk-condition condition="@conditionalExpressions.isLoading">
+            <psk-ui-loader slot="condition-true" should-be-rendered="true"></psk-ui-loader>
+            <psk-label slot="condition-true" label="@receiveDossierLoadingLabel"></psk-label>
+
+            <div slot="condition-false">
+                <psk-text-input view-model="domainInput"></psk-text-input>
+                <psk-text-input view-model="contractNameInput"></psk-text-input>
+                <psk-text-input view-model="methodNameInput"></psk-text-input>
+                <psk-textarea class="full-width align-left" view-model="methodParamsInput"></psk-textarea>
+                <psk-button view-model="buttons.testMethod"></psk-button>
+
+                <psk-label label="@errorMessage" class="error"></psk-label>
+                <psk-textarea class="full-width align-left" view-model="methodResultTextarea"></psk-textarea>
+            </div>
+        </psk-condition>
+
+    </psk-modal>
+</psk-container>

@@ -1,0 +1,1 @@
+import{C as o,b as r}from"./p-4c63894e.js";const s={VERSIONS:[{ref:o,version:"v1.0"},{ref:r,version:"v2.0"}]},e=window.customThemeVersion,i=([1,2].includes(e)?s.VERSIONS[e-1]:s.VERSIONS[0]).ref;export{i as C}
