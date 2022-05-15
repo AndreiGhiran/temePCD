@@ -1,0 +1,15 @@
+# Ignore everything
+*
+
+# But not these files...
+!.gitignore
+!bin
+!bin/**
+!code/
+!code/assets/**
+!LICENSE
+!package.json
+!package-lock.json
+!README.md
+!CHANGELOG
+!apihub-root/secure-channels/wallet-template
