@@ -1,1 +1,0 @@
-import{s as o}from"./p-986eab93.js";import"./p-4c63894e.js";const s=()=>o((o=>o.mode||o.getAttribute("mode")||"default")),e=()=>{s(),s()};export{e as g}
