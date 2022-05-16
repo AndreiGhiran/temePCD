@@ -9,7 +9,21 @@
     <!-- Adding items -->
     <section class="addition">
         <label for="@item.id">Create your TODO:</label>
-        <input data-view-model="@item" data-tag="create-todo">
+        <input data-view-model="@item" data-tag="create-priority-input" priority="urgent">
+        <label for="@priority.value">Pick TODO priority:</label>
+        <select data-view-model="@priority" data-tag="create-priority">
+            <option value="1">Later</option>
+            <option value="2">Normal</option>
+            <option value="3">Urgent</option>
+          </select>
+        <button data-tag="create-todo">Create TODO</button>
+
+    </section>
+    <section class="addition" data-tag="sorting">
+        <label>Order items:</label>
+        <label name="az-todo-sort">Alphabetical</label>
+        <label name="prio-todo-sort">By Priority</label>
+        <label name="checked-todo-sort">Not Done First</label>
     </section>
 
     <!-- Render each item from the model -->
@@ -19,6 +33,7 @@
                 <input type="checkbox" data-view-model="@checkbox">
             </label>
             <input type="text" data-view-model="@input">
+            <input data-view-model="@priority">
             <button data-view-model="@delete" class="delete-icon">&#10005;</button>
         </div>
 

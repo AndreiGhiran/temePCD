@@ -12,6 +12,7 @@ export default class TodoListController extends WebcController {
                 if (err) {
                     return this._handleError(err);
                 } else {
+                    console.log(data);
                     this.setItemsClean(data);
                 }
                 // Init the listeners to handle events
@@ -26,7 +27,14 @@ export default class TodoListController extends WebcController {
                 id: 'item',
                 name: 'item',
                 value: '',
+                priority_val: 2,
                 placeholder: 'Type your item here'
+            },
+            priority:{
+                id: 'item_priority',
+                name: 'priority',
+                value: 2,
+                placeholder: 'Normal'
             },
             'no-data': 'There are no TODOs'
         };
@@ -39,9 +47,14 @@ export default class TodoListController extends WebcController {
         // This is used for creating new todo elements
         const todoCreatorElement = this.getElementByTag('create-todo');
         if (todoCreatorElement) {
-            todoCreatorElement.addEventListener("focusout", this._mainInputBlurHandler);
-        }
+            // todoCreatorElement.addEventListener("focusout", this._mainInputBlurHandler);
+            todoCreatorElement.addEventListener("click", this._mainInputBlurHandler);
 
+        }
+        const sortingElement = this.getElementByTag('sorting');
+        if (sortingElement) {
+            sortingElement.addEventListener("click", this._sortClickHandler)
+        }
         // Selecting the parent of all the items and add the event listeners
         const itemsElement = this.getElementByTag('items');
         if (itemsElement) {
@@ -57,7 +70,19 @@ export default class TodoListController extends WebcController {
 
     _addNewListItem() {
         let fieldIdentifier = crypto.randomUUID();
-
+        let priority_text = 'Normal';
+        console.log(this.model.item);
+        switch (this.model.priority.value){
+            case '1':
+                priority_text = 'Later';
+                break;
+            case '2':
+                priority_text = 'Normal';
+                break;
+            case '3':
+                priority_text = 'Urgent';
+                break;
+        }
         let newItem = {
             checkbox: {
                 name: 'todo-checkbox-' + fieldIdentifier,
@@ -66,6 +91,16 @@ export default class TodoListController extends WebcController {
             input: {
                 name: 'todo-input-' + fieldIdentifier,
                 value: this.model.item.value,
+                readOnly: true
+            },
+            priority: {
+                name: 'todo-prio-' + fieldIdentifier,
+                value: priority_text,
+                readOnly: true
+            },
+            priority_val: {
+                name: 'todo-prio-val-' + fieldIdentifier,
+                value: this.model.priority.value,
                 readOnly: true
             },
             delete: {
@@ -97,8 +132,10 @@ export default class TodoListController extends WebcController {
     }
 
     _mainInputBlurHandler = (event) => {
+        console.log("_mainInputBlurHandler");
+        const todoCreatorElementInput = this.getElementByTag('create-priority-input');
         // We shouldn't add a blank element in the list
-        if (!this.stringIsBlank(event.target.value)) {
+        if (!this.stringIsBlank(todoCreatorElementInput.value)) {
             this._addNewListItem();
         }
     }
@@ -135,6 +172,7 @@ export default class TodoListController extends WebcController {
     _clickHandler = (event) => {
         const elementName = event.target.name;
         console.log(elementName);
+        console.log(event.target);
 
         if (!elementName) {
             return;
@@ -147,6 +185,124 @@ export default class TodoListController extends WebcController {
         if (elementName.includes('todo-delete')) {
             this._deleteItem(event);
         }
+
+        if (elementName.includes('az-todo-sort')) {
+
+            this._sortTodos(event);
+        }
+    }
+
+    _sortClickHandler = (event) => {
+        const elementName = event.target.getAttribute("name");
+        console.log(elementName);
+        // console.log(event.target);
+
+        if (!elementName) {
+            return;
+        }
+
+        if (elementName.includes('az-todo-sort')) {
+
+            this._AZsortTodos(event);
+        }
+        if (elementName.includes('prio-todo-sort')) {
+
+            this._PrioSortTodos(event);
+        }
+        if (elementName.includes('checked-todo-sort')) {
+
+            this._CheckSortTodos(event);
+        }
+    }
+
+    _AZsortTodos = (event) => {
+        this.populateItemList((err, data) => {
+            if (err) {
+                return this._handleError(err);
+            } else {
+                console.log("AZ Sort");
+                for (let i = 0; i < data.length; i++){
+                    for (let j = i; j < data.length; j++){
+                        if (data[i].input.value > data[j].input.value){
+                            let temp = data[i];
+                            data[i] = data[j];
+                            data[j] = temp;
+                        }
+                    }
+                }
+                this.setItemsClean(data);
+            }
+        });
+    }
+
+    _PrioSortTodos = (event) => {
+        this.populateItemList((err, data) => {
+            if (err) {
+                return this._handleError(err);
+            } else {
+                console.log("prio Sort");
+                for (let i = 0; i < data.length; i++){
+                    for (let j = i+1; j < data.length; j++){
+                        if (data[i].priority_val){
+                            if (data[i].priority_val.value < data[j].priority_val.value){
+                                let temp = data[i];
+                                data[i] = data[j];
+                                data[j] = temp;
+                            }   
+                        }
+                        else {
+                            let temp = data[i];
+                            data[i] = data[j];
+                            data[j] = temp;
+                        }
+                    }
+                }
+                this.setItemsClean(data);
+            }
+        });
+    }
+
+    _CheckSortTodos = (event) => {
+        this.populateItemList((err, data) => {
+            if (err) {
+                return this._handleError(err);
+            } else {
+                console.log("check Sort");
+                console.log(data);
+                let l=0;
+                let r = data.length-1;
+                while(l < r){
+                    if (data[l].checkbox.checked != data[r].checkbox.checked){
+                        if (data[l].checkbox.checked){
+                            let temp = data[l];
+                            data[l] = data[r];
+                            data[r] = temp;
+                        }
+                    }
+                    if(data[r].checkbox.checked){
+                        r=r-1;
+                    }
+                    if(!data[l].checkbox.checked){
+                        l=l+1;
+                    }
+                }
+                // for (let i = 0; i < data.length; i++){
+                //     if (data[i].checkbox.checked){
+                //         let j=i+1;
+                //         let k = i;
+                //         while (j < data.length){
+                //             let temp = data[k];
+                //             data[k] = data[j];
+                //             data[j] = temp;
+                //             j = j+1;
+                //             k = k+1;
+                //         }
+                //     }   
+                // }
+                console.log(data);
+                this.setItemsClean(data);
+            }
+        });
     }
 
     _deleteItem = (event) => {
@@ -204,6 +360,7 @@ export default class TodoListController extends WebcController {
         if (newItems) {
             // Set the model fresh, without proxies
             this.model.items = JSON.parse(JSON.stringify(newItems))
+            console.log(newItems);
         } else {
             this.model.items = [];
         }
