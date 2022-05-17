@@ -25,6 +25,17 @@
         <label name="prio-todo-sort">By Priority</label>
         <label name="checked-todo-sort">Not Done First</label>
     </section>
+    <section class="addition">
+        <label>Filter todos</label>
+        <select id="selection" data-tag="filtering">
+            <option value="1">Later</option>
+            <option value="2">Normal</option>
+            <option value="3">Urgent</option>
+            <option value="4">Checked</option>
+            <option value="5">NotChecked</option>
+        </select>
+        <button data-tag="reset-filtering">Reset filtering</button>
+    </section>
 
     <!-- Render each item from the model -->
     <section class="todos" data-for="@items" data-tag="items">
